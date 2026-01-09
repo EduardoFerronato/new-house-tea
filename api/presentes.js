@@ -23,6 +23,12 @@ async function writeDB(data) {
         return true;
     } catch (error) {
         console.error('Erro ao escrever db.json:', error);
+        // Na Vercel, o sistema de arquivos é read-only em produção
+        if (error.code === 'EROFS' || error.code === 'EACCES' || error.message.includes('read-only')) {
+            console.warn('⚠️ Sistema de arquivos é read-only na Vercel. Use um banco de dados real para produção.');
+            // Retornar erro mais descritivo
+            throw new Error('Sistema de arquivos é read-only. Use um banco de dados real para produção.');
+        }
         return false;
     }
 }
