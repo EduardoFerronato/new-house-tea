@@ -1,0 +1,21 @@
+{
+  "name": "new-house-tea",
+  "version": "1.0.0",
+  "description": "Página React leve sem build tools",
+  "scripts": {
+    "dev": "serve -l 3000",
+    "server": "node server.js",
+    "start": "serve -l 3000"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "json-server": "^1.0.0-beta.3",
+    "serve": "^14.2.1"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.2.1"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/presentes/confirmar",
+      "destination": "/api/confirmar"
+    },
+    {
+      "source": "/api/presentes/:id/resetar",
+      "destination": "/api/resetar/:id"
+    }
+  ]
+}
+

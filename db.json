@@ -1,0 +1,102 @@
+{
+  "presentes": [
+    {
+      "id": 1,
+      "nome": "Conjunto de Panelas",
+      "status": "confirmado",
+      "pessoa": "ddsd",
+      "dataConfirmacao": "2026-01-09T15:24:31.341Z"
+    },
+    {
+      "id": 2,
+      "nome": "Jogo de Pratos",
+      "status": "disponivel",
+      "pessoa": null,
+      "dataConfirmacao": null
+    },
+    {
+      "id": 3,
+      "nome": "Jogo de Copos",
+      "status": "disponivel",
+      "pessoa": null,
+      "dataConfirmacao": null
+    },
+    {
+      "id": 4,
+      "nome": "Utensílios de Cozinha",
+      "status": "confirmado",
+      "pessoa": "dasda",
+      "dataConfirmacao": "2026-01-09T15:25:18.494Z"
+    },
+    {
+      "id": 5,
+      "nome": "Roupas de Cama",
+      "status": "disponivel",
+      "pessoa": null,
+      "dataConfirmacao": null
+    },
+    {
+      "id": 6,
+      "nome": "Toalhas",
+      "status": "disponivel",
+      "pessoa": null,
+      "dataConfirmacao": null
+    },
+    {
+      "id": 7,
+      "nome": "Cafeteira",
+      "status": "confirmado",
+      "pessoa": "Eduardo",
+      "dataConfirmacao": "2026-01-09T15:22:47.000Z"
+    },
+    {
+      "id": 8,
+      "nome": "Liquidificador",
+      "status": "disponivel",
+      "pessoa": null,
+      "dataConfirmacao": null
+    },
+    {
+      "id": 9,
+      "nome": "Micro-ondas",
+      "status": "confirmado",
+      "pessoa": "Ed",
+      "dataConfirmacao": "2026-01-09T15:51:11.528Z"
+    },
+    {
+      "id": 10,
+      "nome": "Aspirador de Pó",
+      "status": "disponivel",
+      "pessoa": null,
+      "dataConfirmacao": null
+    },
+    {
+      "id": 11,
+      "nome": "Varal",
+      "status": "confirmado",
+      "pessoa": "adfgafg",
+      "dataConfirmacao": "2026-01-09T15:25:27.064Z"
+    },
+    {
+      "id": 12,
+      "nome": "Organizadores",
+      "status": "disponivel",
+      "pessoa": null,
+      "dataConfirmacao": null
+    },
+    {
+      "id": 13,
+      "nome": "Decoração",
+      "status": "disponivel",
+      "pessoa": null,
+      "dataConfirmacao": null
+    },
+    {
+      "id": 14,
+      "nome": "aaaa",
+      "status": "disponivel",
+      "pessoa": null,
+      "dataConfirmacao": null
+    }
+  ]
+}
