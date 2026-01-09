@@ -74,20 +74,31 @@ module.exports = async (req, res) => {
             dataConfirmacao: new Date().toISOString()
         };
 
-        const saved = await writeDB(db);
+        try {
+            const saved = await writeDB(db);
 
-        if (saved) {
-            return res.status(200).json({ 
-                success: true, 
-                message: 'Presente confirmado com sucesso!',
-                presente: db.presentes[presenteIndex]
-            });
-        } else {
-            return res.status(500).json({ error: 'Erro ao salvar no banco de dados' });
+            if (saved) {
+                return res.status(200).json({ 
+                    success: true, 
+                    message: 'Presente confirmado com sucesso!',
+                    presente: db.presentes[presenteIndex]
+                });
+            } else {
+                return res.status(500).json({ error: 'Erro ao salvar no banco de dados' });
+            }
+        } catch (writeError) {
+            console.error('Erro ao escrever:', writeError);
+            if (writeError.message && writeError.message.includes('read-only')) {
+                return res.status(500).json({ 
+                    error: '⚠️ Sistema de arquivos é read-only na Vercel. Para produção, você precisa usar um banco de dados real.' 
+                });
+            }
+            throw writeError;
         }
     } catch (error) {
         console.error('Erro ao confirmar presente:', error);
-        return res.status(500).json({ error: 'Erro ao confirmar presente' });
+        const errorMessage = error.message || 'Erro ao confirmar presente';
+        return res.status(500).json({ error: errorMessage });
     }
 };
 

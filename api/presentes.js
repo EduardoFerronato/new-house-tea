@@ -83,23 +83,38 @@ module.exports = async (req, res) => {
 
             db.presentes.push(novoPresente);
 
-            const saved = await writeDB(db);
-
-            if (saved) {
-                return res.status(200).json({ 
-                    success: true, 
-                    message: 'Presente adicionado com sucesso!',
-                    presente: novoPresente
-                });
-            } else {
-                return res.status(500).json({ error: 'Erro ao salvar no banco de dados' });
+            try {
+                const saved = await writeDB(db);
+                
+                if (saved) {
+                    return res.status(200).json({ 
+                        success: true, 
+                        message: 'Presente adicionado com sucesso!',
+                        presente: novoPresente
+                    });
+                } else {
+                    return res.status(500).json({ 
+                        error: 'Erro ao salvar no banco de dados. O sistema de arquivos pode ser read-only.' 
+                    });
+                }
+            } catch (writeError) {
+                console.error('Erro ao escrever:', writeError);
+                // Se o erro for de sistema de arquivos read-only
+                if (writeError.message && writeError.message.includes('read-only')) {
+                    return res.status(500).json({ 
+                        error: '⚠️ Sistema de arquivos é read-only na Vercel. Para produção, você precisa usar um banco de dados real (MongoDB, Supabase, etc.). As alterações não serão salvas permanentemente.' 
+                    });
+                }
+                throw writeError; // Re-lança outros erros
             }
         }
 
         return res.status(405).json({ error: 'Método não permitido' });
     } catch (error) {
         console.error('Erro:', error);
-        return res.status(500).json({ error: 'Erro interno do servidor' });
+        // Retornar mensagem de erro mais descritiva
+        const errorMessage = error.message || 'Erro interno do servidor';
+        return res.status(500).json({ error: errorMessage });
     }
 };
 

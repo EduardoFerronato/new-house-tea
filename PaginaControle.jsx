@@ -75,7 +75,9 @@ function PaginaControle() {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.error || 'Erro ao adicionar presente');
+                // Se o erro contém informação sobre read-only, mostrar mensagem mais clara
+                const errorMsg = data.error || 'Erro ao adicionar presente';
+                throw new Error(errorMsg);
             }
 
             setMensagem({ tipo: 'sucesso', texto: 'Presente adicionado com sucesso!' });
