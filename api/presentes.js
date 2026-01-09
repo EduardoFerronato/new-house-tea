@@ -1,37 +1,4 @@
-const fs = require('fs').promises;
-const path = require('path');
-
-// Função auxiliar para ler o banco de dados
-async function readDB() {
-    try {
-        // Na Vercel, o arquivo está na raiz do projeto
-        const DB_FILE = path.join(__dirname, '..', 'db.json');
-        const data = await fs.readFile(DB_FILE, 'utf8');
-        return JSON.parse(data);
-    } catch (error) {
-        console.error('Erro ao ler db.json:', error);
-        return { presentes: [] };
-    }
-}
-
-// Função auxiliar para salvar no banco de dados
-async function writeDB(data) {
-    try {
-        // Na Vercel, o arquivo está na raiz do projeto
-        const DB_FILE = path.join(__dirname, '..', 'db.json');
-        await fs.writeFile(DB_FILE, JSON.stringify(data, null, 2), 'utf8');
-        return true;
-    } catch (error) {
-        console.error('Erro ao escrever db.json:', error);
-        // Na Vercel, o sistema de arquivos é read-only em produção
-        if (error.code === 'EROFS' || error.code === 'EACCES' || error.message.includes('read-only')) {
-            console.warn('⚠️ Sistema de arquivos é read-only na Vercel. Use um banco de dados real para produção.');
-            // Retornar erro mais descritivo
-            throw new Error('Sistema de arquivos é read-only. Use um banco de dados real para produção.');
-        }
-        return false;
-    }
-}
+const { readDB, writeDB, ensureMongoDB, getMongoDb } = require('./db-helper');
 
 module.exports = async (req, res) => {
     // Configurar CORS
@@ -42,6 +9,9 @@ module.exports = async (req, res) => {
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
     }
+
+    // Inicializar MongoDB se disponível
+    await ensureMongoDB();
 
     try {
         if (req.method === 'GET') {
@@ -61,16 +31,36 @@ module.exports = async (req, res) => {
 
             const db = await readDB();
             
+            const mongoDb = getMongoDb();
+            
             // Verificar se já existe um presente com esse nome
-            const existe = db.presentes.some(p => p.nome.toLowerCase() === nome.trim().toLowerCase());
-            if (existe) {
-                return res.status(400).json({ error: 'Já existe um presente com esse nome' });
+            if (mongoDb) {
+                const collection = mongoDb.collection('presentes');
+                const existe = await collection.findOne({ 
+                    nome: { $regex: new RegExp(`^${nome.trim()}$`, 'i') } 
+                });
+                if (existe) {
+                    return res.status(400).json({ error: 'Já existe um presente com esse nome' });
+                }
+            } else {
+                // Verificação local para JSON
+                const existe = db.presentes.some(p => p.nome.toLowerCase() === nome.trim().toLowerCase());
+                if (existe) {
+                    return res.status(400).json({ error: 'Já existe um presente com esse nome' });
+                }
             }
 
             // Encontrar o maior ID
-            const maxId = db.presentes.length > 0 
-                ? Math.max(...db.presentes.map(p => p.id)) 
-                : 0;
+            let maxId = 0;
+            if (mongoDb) {
+                const collection = mongoDb.collection('presentes');
+                const maxDoc = await collection.findOne({}, { sort: { id: -1 } });
+                maxId = maxDoc ? maxDoc.id : 0;
+            } else {
+                maxId = db.presentes.length > 0 
+                    ? Math.max(...db.presentes.map(p => p.id)) 
+                    : 0;
+            }
 
             // Criar novo presente
             const novoPresente = {
@@ -81,7 +71,13 @@ module.exports = async (req, res) => {
                 dataConfirmacao: null
             };
 
-            db.presentes.push(novoPresente);
+            // Adicionar presente
+            if (mongoDb) {
+                const collection = mongoDb.collection('presentes');
+                await collection.insertOne(novoPresente);
+            } else {
+                db.presentes.push(novoPresente);
+            }
 
             try {
                 const saved = await writeDB(db);
