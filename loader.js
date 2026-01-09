@@ -9,7 +9,7 @@ window.addEventListener('DOMContentLoaded', async function() {
                     typeof Babel !== 'undefined') {
                     clearInterval(checkLibs);
                     resolve();
-                }
+                } 
             }, 50);
         });
     }
