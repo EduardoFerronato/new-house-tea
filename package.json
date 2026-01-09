@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "serve -l 3000",
     "server": "node server.js",
-    "start": "serve -l 3000"
+    "start": "serve -l 3000",
+    "build": "echo 'No build step required'"
   },
   "keywords": [],
   "author": "",

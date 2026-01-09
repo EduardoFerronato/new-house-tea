@@ -1,23 +1,5 @@
-# Dependências
-node_modules/
-
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Sistema operacional
+node_modules
+.env
+*.log
 .DS_Store
-Thumbs.db
-
-# IDEs
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# Arquivos temporários
-*.tmp
-*.temp
-
+.vercel
