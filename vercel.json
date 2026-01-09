@@ -1,12 +1,41 @@
 {
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/api/presentes/confirmar",
-      "destination": "/api/confirmar"
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
     },
     {
-      "source": "/api/presentes/:id/resetar",
-      "destination": "/api/resetar/:id"
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "."
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/presentes/confirmar",
+      "dest": "/api/confirmar.js"
+    },
+    {
+      "src": "/api/presentes/([^/]+)/resetar",
+      "dest": "/api/resetar/$1.js"
+    },
+    {
+      "src": "/api/presentes/([^/]+)",
+      "dest": "/api/presentes/$1.js"
+    },
+    {
+      "src": "/api/presentes",
+      "dest": "/api/presentes.js"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
     }
   ]
 }
