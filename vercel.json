@@ -13,29 +13,18 @@
       }
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/presentes/confirmar",
-      "dest": "/api/confirmar.js"
+      "source": "/api/presentes/confirmar",
+      "destination": "/api/confirmar"
     },
     {
-      "src": "/api/presentes/([^/]+)/resetar",
-      "dest": "/api/resetar/$1.js"
+      "source": "/api/presentes/:id/resetar",
+      "destination": "/api/resetar/:id"
     },
     {
-      "src": "/api/presentes/([^/]+)",
-      "dest": "/api/presentes/$1.js"
-    },
-    {
-      "src": "/api/presentes",
-      "dest": "/api/presentes.js"
-    },
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "source": "/api/presentes/:id",
+      "destination": "/api/presentes/:id"
     }
   ]
 }
