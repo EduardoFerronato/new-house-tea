@@ -3,3 +3,8 @@ node_modules
 *.log
 .DS_Store
 .vercel
+
+# Firebase - NUNCA commitar chaves
+*-firebase-adminsdk-*.json
+firebase-adminsdk-*.json
+*.json.backup
